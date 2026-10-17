@@ -1,0 +1,19 @@
+# lokálna konfigurácia (cesty, účet)
+config.env
+
+# osobné údaje a výstupy — NIKDY necommitovať
+agent_queries*.jsonl
+agent_out/
+agent_uploads/
+*.out
+*.log
+
+# veľké dáta
+rag_docs/
+rag_index*/
+agentic/static/mathjax.js
+
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db

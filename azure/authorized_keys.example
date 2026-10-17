@@ -1,0 +1,14 @@
+# Riadok do ~/.ssh/authorized_keys na LOGIN uzle (jeden riadok, tu zalomený len pre čitateľnosť).
+# Kľúč z frontend VM vie IBA:
+#   (a) port-forward na <uzol>:8200 (žiadny iný host/port),
+#   (b) spustiť agent_node.sh (vypíše master uzol) — žiadny shell, PTY, agent/X11 forwarding.
+#
+# restrict,port-forwarding,command="/home/<CLUSTER_USER>/agent_node.sh",permitopen="gpu01:8200",permitopen="gpu02:8200",...,permitopen="gpu26:8200" ssh-ed25519 AAAA... janko-tunnel-azure
+#
+# Zoznam permitopen pre uzly gpu01–gpu26 vygeneruješ napr.:
+#   echo $(for i in $(seq -w 1 26); do printf 'permitopen="gpu%s:8200",' $i; done) | sed 's/,$//'
+#
+# Overenie z VM (musí platiť):
+#   ssh perun-login whoami          → vypíše uzol (forced command), nie meno používateľa
+#   ssh -N -L 9999:<login>:22 perun-login   → odmietnuté
+#   ssh -N -L 8200:<uzol>:8200 perun-login  → funguje

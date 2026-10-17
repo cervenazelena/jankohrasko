@@ -1,0 +1,15 @@
+# /etc/systemd/system/janko-tunnel.service
+#   sudo systemctl daemon-reload && sudo systemctl enable --now janko-tunnel
+[Unit]
+Description=Janko Hrasko - SSH tunel na agenta (Perun :8200)
+Wants=network-online.target
+After=network-online.target pritunl-client.service
+
+[Service]
+User=azureuser
+ExecStart=/home/azureuser/janko_tunnel.sh
+Restart=always
+RestartSec=20
+
+[Install]
+WantedBy=multi-user.target

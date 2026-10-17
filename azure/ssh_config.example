@@ -1,0 +1,9 @@
+# ~/.ssh/config na frontend VM (používateľ azureuser)
+Host perun-login
+    HostName <LOGIN_HOST>              # login uzol klastra, dostupný cez VPN
+    User <CLUSTER_USER>
+    IdentityFile ~/.ssh/perun_tunnel_ed25519
+    IdentitiesOnly yes                 # nikdy neskúšať iné kľúče
+    ServerAliveInterval 15
+    ServerAliveCountMax 3
+    TCPKeepAlive yes

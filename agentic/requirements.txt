@@ -1,0 +1,24 @@
+# Agentická vrstva (RAG + agent) — verzie z produkčného venv na TUKE Perun (python 3.11).
+# torch sa inštaluje zvlášť ako CPU build (perun/setup_agentic_env.sh):
+#   pip install torch==2.13.0 --index-url https://download.pytorch.org/whl/cpu
+faiss-cpu==1.14.3
+sentence-transformers==5.6.0
+transformers==5.14.1
+numpy==2.4.6
+rank_bm25==0.2.2
+fastapi==0.139.2
+uvicorn==0.51.0
+pydantic==2.13.4
+python-multipart==0.0.32
+ddgs==9.14.4
+beautifulsoup4==4.15.0
+pypdf==6.14.2
+pymupdf==1.28.0
+striprtf==0.0.32
+olefile==0.47
+reportlab==5.0.0
+python-docx==1.2.0
+openpyxl==3.1.5
+python-pptx==1.0.2
+odfpy==1.4.1
+sympy==1.14.0

@@ -1,0 +1,25 @@
+diff --git a/deep_ep/include/deep_ep/common/ptx.cuh b/deep_ep/include/deep_ep/common/ptx.cuh
+index 4879c70..b7b0801 100644
+--- a/deep_ep/include/deep_ep/common/ptx.cuh
++++ b/deep_ep/include/deep_ep/common/ptx.cuh
+@@ -92,10 +92,20 @@ __forceinline__ __device__ void mbarrier_wait_and_flip_phase(mbarrier* ptr, arri
+ template <int kNumBytes>
+ __forceinline__ __device__ void st_bulk(void* smem_ptr) {
+     EP_STATIC_ASSERT(kNumBytes % 8 == 0, "`st.bulk` requires size to be a multiple of 8");
++#if defined(__CUDA_ARCH__) && (__CUDA_ARCH__ >= 1000)
+     asm volatile("st.bulk.weak.shared::cta [%0], %1, 0;\n" ::
+                  "r"(static_cast<uint32_t>(__cvta_generic_to_shared(smem_ptr))),
+                  "r"(kNumBytes)
+                  : "memory");
++#else
++    // PATCH(TUKE): `st.bulk` vyžaduje sm_100+ (Blackwell); na Hopperi (sm_90) vynuluj
++    // smem región manuálne. Volané pod elect_one_sync (1 aktívny thread), takže
++    // single-thread slučka je verná náhrada; kompilátor ju vektorizuje na st.shared.v2.
++    auto smem_uint2 = reinterpret_cast<uint2*>(smem_ptr);
++    #pragma unroll 8
++    for (int i = 0; i < kNumBytes / static_cast<int>(sizeof(uint2)); ++ i)
++        smem_uint2[i] = make_uint2(0u, 0u);
++#endif
+ }
+
+ __forceinline__ __device__ void tma_store_fence() {
